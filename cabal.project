@@ -1,0 +1,2 @@
+packages: ., ../xmobar
+flags: +all_extensions

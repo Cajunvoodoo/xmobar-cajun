@@ -1,0 +1,85 @@
+name:               xmobar-cajun
+version:            0.1
+description:        xmobar configs
+author:             jao, cajun
+copyright:          2018, 2019, 2020, 2022, 2023 Jose A Ortega Ruiz
+license:            GPL-3
+build-type:         Simple
+cabal-version:      >=1.10
+extra-source-files: readme.md
+
+library
+  hs-source-dirs:   lib
+  exposed-modules:
+    Bottom
+    Config
+    Monitors
+
+  build-depends:
+      aeson
+    , async         >=2.2.0
+    , base          >=4.7   && <5
+    , bytestring
+    , hinotify
+    , http-conduit
+    , stm           >=2.5
+    , text
+    , xmobar
+
+  -- other-modules: Paths_xmobar_config
+  default-language: Haskell2010
+
+executable xmobar-single
+  main-is:          Single.hs
+  hs-source-dirs:   src
+  ghc-options:      -rtsopts -with-rtsopts=-V0 -threaded
+  build-depends:
+      base
+    , xmobar
+    , xmobar-cajun
+
+  default-language: Haskell2010
+
+executable xmobar-emacs
+  main-is:          Emacs.hs
+  hs-source-dirs:   src
+  ghc-options:      -rtsopts -with-rtsopts=-V0 -threaded
+  build-depends:
+      base
+    , xmobar
+    , xmobar-cajun
+
+  default-language: Haskell2010
+
+executable xmobar-top
+  main-is:          Top.hs
+  hs-source-dirs:   src
+  ghc-options:      -rtsopts -with-rtsopts=-V0 -threaded
+  build-depends:
+      base
+    , xmobar
+    , xmobar-cajun
+
+  default-language: Haskell2010
+
+executable xmobar-sway
+  main-is:          Sway.hs
+  hs-source-dirs:   src
+  ghc-options:      -rtsopts -with-rtsopts=-V0 -threaded
+  build-depends:
+      base
+    , xmobar
+    , xmobar-cajun
+
+  default-language: Haskell2010
+
+executable xmobar-test
+  main-is:          Test.hs
+  hs-source-dirs:   src
+  ghc-options:      -rtsopts -with-rtsopts=-V0 -threaded
+  build-depends:
+      base
+    , xmobar
+    , xmobar-cajun
+
+  default-language: Haskell2010
