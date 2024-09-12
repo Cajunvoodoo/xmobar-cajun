@@ -138,7 +138,7 @@ cpuBars p =
     ( mkArgs
         p
         [ "--template"
-        , "<autoipat> <total>%"
+        , "<autoipat> CPU: <total>%"
         , "-L"
         , "50"
         , "-H"
@@ -147,7 +147,7 @@ cpuBars p =
         , "3"
         ]
         [ "--fallback-icon-pattern"
-        , "<icon=load_%%.xpm/>"
+        , "<icon=/home/cajun/Projects/Haskell/xmobar-cajun/icons/dark/load_%%.xpm/>"
         , "--contiguous-icons"
         ]
     )
@@ -241,7 +241,7 @@ weather' tmp st p =
     )
     18000
 
-weather = weather' "<fn=2><skyConditionS></fn> <tempC>°  <windKmh> <weather>"
+weather = weather' "<fn=2><skyConditionS></fn> <tempF>°  <windMs> <weather>"
 
 -- "https://wttr.in?format=" ++ fnn 3 "%c" ++ "+%t+%C+%w++" ++ fnn 1 "%m"
 -- , Run (ComX "curl" [wttrURL "Edinburgh"] "" "wttr" 18000)
@@ -505,7 +505,23 @@ brightness' = Brightness ["--", "-D", "amdgpu_bl0", "-C", "brightness"] 10
 memory =
   Memory
     [ "-t"
-    , "<used>:<available>"
+    , "Mem: <used>/<total>GB"
+    , "-p"
+    , "2"
+    , "-W"
+    , "4"
+    , "-d"
+    , "1"
+    , "--"
+    , "--scale"
+    , "1024"
+    ]
+    20
+
+swapMem =
+  Swap
+    [ "-t"
+    , "Swap: <usedratio>%"
     , "-p"
     , "2"
     , "-W"

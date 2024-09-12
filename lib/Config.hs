@@ -69,6 +69,7 @@ zenburnFg = "#989890" -- "#DCDCCC"
 zenburnYl = "#F0DFAF"
 zenburnGreen = "#7F9F7F"
 doomBack = "#22242b"
+pitchBlack = "#000000"
 
 darkPalette :: Palette
 darkPalette =
@@ -80,7 +81,7 @@ darkPalette =
     , pDim = "#7f7f7f"
     , pBorder = "#000000" -- zenburnBackLight
     , pForeground = zenburnFg
-    , pBackground = doomBack -- zenburnBack
+    , pBackground = pitchBlack  -- doomBack -- zenburnBack
     , pAlpha = 255
     , pIconRoot = icons "dark"
     , pIsLight = False
