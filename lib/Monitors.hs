@@ -138,13 +138,15 @@ cpuBars p =
     ( mkArgs
         p
         [ "--template"
-        , "<autoipat> CPU: <total>%"
+        , "Cpu: <total>%  <autoipat> "
         , "-L"
         , "50"
         , "-H"
         , "85"
+        , "-W"
+        , "10"
         , "-w"
-        , "3"
+        , "2" -- Number of spaces
         ]
         [ "--fallback-icon-pattern"
         , "<icon=/home/cajun/Projects/Haskell/xmobar-cajun/icons/dark/load_%%.xpm/>"
@@ -241,7 +243,7 @@ weather' tmp st p =
     )
     18000
 
-weather = weather' "<fn=2><skyConditionS></fn> <tempF>°  <windMs> <weather>"
+weather = weather' "<fn=2><skyConditionS></fn> <tempF>°F <windMph>MPH <weather>"
 
 -- "https://wttr.in?format=" ++ fnn 3 "%c" ++ "+%t+%C+%w++" ++ fnn 1 "%m"
 -- , Run (ComX "curl" [wttrURL "Edinburgh"] "" "wttr" 18000)
@@ -524,10 +526,14 @@ swapMem =
     , "Swap: <usedratio>%"
     , "-p"
     , "2"
-    , "-W"
-    , "4"
-    , "-d"
+    -- , "-W"
+    -- , "2"
+    , "-m"
+    , "2"
+    , "-d" -- decimal digits
     , "1"
+    , "-L 0"
+    , "-H 50"
     , "--"
     , "--scale"
     , "1024"
@@ -538,17 +544,25 @@ dynNetwork p =
   DynNetwork
     ( p
         <~> [ "-t"
-            , fn 1 "↑ " ++ "<tx>  " ++ fn 1 "↓" ++ " <rx>"
+            , concat
+              [ fn 1 "↓ "
+              , "<rx>"
+              , fn 1 " ↑ "
+              , "<tx>"
+              ]
+            -- "↑ 000 | ↓ 000
             , "-L"
             , "20"
             , "-H"
             , "1024000"
-            , "-m"
+            , "-m" -- min width
             , "5"
             , "-W"
             , "10"
             , "-S"
-            , "Off"
+            , "True" -- display units
+            , "-x"
+            , "[OFFLINE]" -- When monitor unavail
             ]
     )
     10

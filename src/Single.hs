@@ -53,16 +53,11 @@ config p =
     , persistent = False
     , commands = [
         Run $ XPropertyLog "_XMONAD_LOG_1"
-      , Run $ Weather "KBOS" ["-t","<tempF>F <skyCondition>","-L","64","-H","77","-n","#CEFFAC","-h","#FFB6B0","-l","#96CBFE"] 36000
       , Run $ cpuBars p
       , Run $ weather  "KBOS" p
       , Run $ batt p
-      -- , Run $ MultiCpu ["-t","Cpu: <total0> <total1> <total2> <total3>","-L","30","-H","60","-h","#FFB6B0","-l","#CEFFAC","-n","#FFFFCC","-w","3"] 10
       , Run memory
       , Run swapMem
-      -- , Run $ Memory ["-t","Mem: <usedratio>%","-H","8192","-L","4096","-h","#FFB6B0","-l","#CEFFAC","-n","#FFFFCC"] 10
-      -- , Run $ Swap ["-t","Swap: <usedratio>%","-H","1024","-L","512","-h","#FFB6B0","-l","#CEFFAC","-n","#FFFFCC"] 10
-      -- , Run $ Network "eth0" ["-t","Net: <rx>, <tx>","-H","200","-L","10","-h","#FFB6B0","-l","#CEFFAC","-n","#FFFFCC"] 10
       , Run $ dynNetwork p
       , Run $ Date "%a %b %_d %k:%M" "date" 10
       -- , Run $ Com "getMasterVolume" [] "volumelevel" 10
@@ -71,7 +66,7 @@ config p =
     ]
     , sepChar = "%"
     , alignSep = "}{"
-    , template = "%_XMONAD_LOG_1% %dynnetwork% }{ %KBOS% %multicpu%  %memory%  %swap%  <fc=#b2b2ff>%default:Master%</fc>   <fc=#FFFFCC>%date%</fc> %batt0%"
+    , template = "<hspace=5/>%_XMONAD_LOG_1% - %multicpu% %memory% %swap% %dynnetwork%}{ %KBOS% <fc=#FFFFCC>%date%</fc> %batt0%"
     }
     -- { position = TopSize C 100 24
     -- , bgColor = if pIsLight p then "#f0f0f0" else "black"
