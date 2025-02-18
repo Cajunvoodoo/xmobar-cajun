@@ -2,6 +2,7 @@ import Config
 import Monitors
 import Xmobar
 
+topProcL :: Palette -> Bool -> Monitors
 topProcL p s = TopProc (p <~> args) 15
  where
   temp
@@ -11,23 +12,28 @@ topProcL p s = TopProc (p <~> args) 15
           ++ "·  <mboth1>  <mboth2>  <mboth3>  <mboth4>"
   args = ["-t", temp, "-w", "12", "-L", "10", "-H", "80"]
 
+diskIOS :: Palette -> Monitors
 diskIOS p = DiskIO [("/", "<total>"), ("/home", "<total>")] (diskArgs p) 10
 
+diskU' :: Palette -> Monitors
 diskU' p =
   DiskU
     [("/", "/ <free>"), ("/var", "/v <free>"), ("/home", "/h <free>")]
     (p >~< ["-L", "20", "-H", "70", "-m", "1", "-p", "3"])
     20
 
+cpuFreq' :: Palette -> Monitors
 cpuFreq' p = CpuFreq (p <~> args) 50
  where
   args = ["-t", "<avg>", "-L", "1", "-H", "2", "-d", "2"]
 
+memory' :: Monitors
 memory' = Memory args 20
  where
   template = "<used> <available>"
   args = ["-t", template, "-p", "2", "-d", "1", "--", "--scale", "1024"]
 
+config :: Palette -> Config
 config p =
   (baseConfig p)
     { position = TopSize C 100 24 -- TopP 0 276
@@ -40,7 +46,8 @@ config p =
     -- right_padding = 12 * 23 = 276
     -- Example: position = TopP 0 276
     -- , font = "xft:monospace-8"
-    , font = "Hack, Noto Color Emoji Regular 9, Light 9"
+    , font = "TX-02 Regular 9"
+    , additionalFonts = ["Hack, Noto Color Emoji Regular 9, Light 9"]
     , bgColor = "#000000"
     , fgColor = "#ffffff"
     , alpha = 233
@@ -133,11 +140,22 @@ config p =
     --       ++ " |laTime| "
     -- }
  where
+  dimi :: String -> String
   dimi = fc "grey40" . fn 1
+
+  isXmonad :: Bool
   isXmonad = pWm p == Just "xmonad"
+
+  trayT :: String
   trayT = if isXmonad then "|tray|" else ""
+
+  eLog :: Palette -> String
   eLog p = if isXmonad then "|XMonadLog|" else fc (pHigh p) "|elog|"
+
+  mail :: String
   mail = if isXmonad then fc "sienna4" " |mail|" else ""
+
+  extraCmds :: [Runnable]
   extraCmds =
     if isXmonad
       then

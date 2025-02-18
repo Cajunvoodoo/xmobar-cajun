@@ -1,12 +1,23 @@
 module Monitors where
 
 import Config
-import Control.Concurrent
+import Control.Concurrent ()
 import Control.Concurrent.Async (async)
 import Control.Concurrent.STM
 import qualified Data.Char as Char
 import qualified Text.Printf as Printf
 import Xmobar
+    ( Monitors(Network, TopProc, Wireless, MultiCpu, CpuFreq, Uptime,
+               WeatherX, BatteryN, K10Temp, MultiCoreTemp, Load, DiskU, DiskIO,
+               Volume, Alsa, Brightness, Memory, Swap, DynNetwork),
+      Date(Date),
+      NotmuchMail(NotmuchMail),
+      Kbd(Kbd),
+      DateZone(DateZone),
+      MailX(MailX),
+      MailItem(MailItem),
+      Command(Com),
+      Station )
 
 topProc p =
   TopProc
@@ -192,6 +203,7 @@ uptime p =
     600
 
 -- https://erikflowers.github.io/weather-icons/
+weather' :: String -> Station -> Palette -> Monitors
 weather' tmp st p =
   WeatherX
     st
@@ -243,10 +255,12 @@ weather' tmp st p =
     )
     18000
 
-weather = weather' "<fn=2><skyConditionS></fn> <tempF>°F <windMph>MPH <weather>"
+weather :: Station -> Palette -> Monitors
+weather = weather' "<fn=1><skyConditionS></fn> <tempF>°F <windMph>MPH <weather>"
 
 -- "https://wttr.in?format=" ++ fnn 3 "%c" ++ "+%t+%C+%w++" ++ fnn 1 "%m"
 -- , Run (ComX "curl" [wttrURL "Edinburgh"] "" "wttr" 18000)
+wttrURL :: [Char] -> [Char]
 wttrURL l = "https://wttr.in/" ++ l ++ "?format=" ++ fmt
  where
   fmt = fnn 2 "+%c+" ++ "+%t+%C+" ++ fn 5 "%w"
@@ -257,20 +271,21 @@ wttrURL l = "https://wttr.in/" ++ l ++ "?format=" ++ fmt
     | otherwise = Printf.printf "%%%02X" c
   urlEncode = concatMap encode
 
+batt :: Palette -> Monitors
 batt p =
   BatteryN
     ["BAT0"]
     [ "-t"
     , "<acstatus> <left>"
-    , "-S"
+    , "-S" -- dont show percent
     , "Off"
-    , "-d"
+    , "-d" -- decimal digits
     , "0"
-    , "-m"
+    , "-m" -- min percent
     , "2"
-    , "-L"
+    , "-L" -- low threshold
     , "10"
-    , "-H"
+    , "-H" -- high threshold
     , "90"
     , "-p"
     , "2"
@@ -304,6 +319,7 @@ batt p =
     50
     "batt0"
 
+iconBatt :: Palette -> Monitors
 iconBatt p =
   BatteryN
     ["BAT0"]
@@ -355,12 +371,14 @@ iconBatt p =
     50
     "batt0"
 
+rizenTemp :: Palette -> Monitors
 rizenTemp p =
   K10Temp
     "0000:00:18.3"
     (mkArgs p ["-t", "<Tctl>°C", "-L", "40", "-H", "70", "-d", "0"] [])
     50
 
+thinkTemp :: Palette -> Monitors
 thinkTemp p =
   MultiCoreTemp
     ( mkArgs
@@ -370,6 +388,7 @@ thinkTemp p =
     )
     50
 
+avgCoretemp :: Palette -> Monitors
 avgCoretemp p =
   MultiCoreTemp
     ( p
@@ -385,6 +404,7 @@ avgCoretemp p =
     )
     50
 
+coreTemp :: Palette -> Monitors
 coreTemp p =
   MultiCoreTemp
     ( p
@@ -400,17 +420,20 @@ coreTemp p =
     )
     50
 
+load :: Palette -> Monitors
 load p =
   Load
     (p <~> ["-t", "<load1> <load5> <load15>", "-L", "1", "-H", "3", "-d", "2"])
     300
 
+diskU :: Palette -> Monitors
 diskU p =
   DiskU
     [("/", "<used>"), ("/media/sda", " s <used>")]
     (p <~> ["-L", "20", "-H", "70", "-m", "1", "-p", "3"])
     20
 
+diskArgs :: Palette -> [String]
 diskArgs p =
   mkArgs
     p
@@ -431,9 +454,11 @@ diskArgs p =
     ]
     ["--total-icon-pattern", "<icon=load_%%.xpm/>", "-c"]
 
+diskIO :: Palette -> Monitors
 diskIO p =
   DiskIO [("rivendell-vg/root", "<readb> <writeb> <totalbipat>")] (diskArgs p) 10
 
+mail :: Palette -> MailX
 mail p =
   MailX
     [ ("I", "jao/inbox", pHigh p)
@@ -452,11 +477,13 @@ mail p =
     ["-d", "~/var/mail", "-s", " "]
     "mail"
 
+nmmail :: NotmuchMail
 nmmail = NotmuchMail "mail" [MailItem "J" "" qj, MailItem "B" "" qb] 100
  where
   qb = "(tag:bigml or tag:alba) and tag:new"
   qj = "(tag:jao or tag:hacking or tag:bills) and tag:new"
 
+masterVol :: Palette -> Monitors
 masterVol p =
   Volume
     "default"
@@ -475,6 +502,7 @@ masterVol p =
     ]
     10
 
+captureVol :: Monitors
 captureVol = Volume "default" "Capture" ["-t", "<volume>"] 10
 
 masterAlsa p =
