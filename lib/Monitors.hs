@@ -256,7 +256,7 @@ weather' tmp st p =
     18000
 
 weather :: Station -> Palette -> Monitors
-weather = weather' "<fn=1><skyConditionS></fn> <tempF>°F <windMph>MPH <weather>"
+weather = weather' "<fn=2><skyConditionS></fn> <tempF>°F <windMph>MPH <weather>"
 
 -- "https://wttr.in?format=" ++ fnn 3 "%c" ++ "+%t+%C+%w++" ++ fnn 1 "%m"
 -- , Run (ComX "curl" [wttrURL "Edinburgh"] "" "wttr" 18000)
