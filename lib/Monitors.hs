@@ -248,16 +248,22 @@ weather' tmp st p =
     , ("light snow", "\xf01b")
     , ("snow", "\xf01b")
     ]
-    ( mkArgs
-        p
-        -- -T Total width, -L low threshold, -H high threshold
-        -- --low lowthres_color, --high highthres_color
-        [ "-t", tmp, "-L", "32", "-H", "80", "-T", "20"]
-        ["-w", "", "--low", lowThresColor] -- default high color is good.
-    )
+    [
+      -- -T Total width, -L low threshold, -H high threshold
+      -- --low lowthres_color, --high highthres_color
+      "-t", tmp,
+      "-L", "32",
+      "-H", "80",
+      "-T", "20",
+      "--low", lowThresColor,
+      "--normal", pNormal p,
+      "--high", pHigh p,
+      "--",
+      "-w", ""
+    ]
     18000
  where
-  lowThresColor = "#5d93a7" -- muted cool blue
+  lowThresColor = "#5D93A7" -- muted cool blue
 
 weather :: Station -> Palette -> Monitors
 weather = weather' "<fn=2><skyConditionS></fn> <tempF>°F <windMph>MPH <weather>"
