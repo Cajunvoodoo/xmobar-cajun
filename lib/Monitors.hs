@@ -258,7 +258,7 @@ weather' tmp st p =
     )
     18000
  where
-  lowThresColor = "#5D93A7" -- muted cool blue
+  lowThresColor = "#5d93a7" -- muted cool blue
 
 weather :: Station -> Palette -> Monitors
 weather = weather' "<fn=2><skyConditionS></fn> <tempF>°F <windMph>MPH <weather>"
