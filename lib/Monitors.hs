@@ -252,9 +252,8 @@ weather' tmp st p =
         p
         -- -T Total width, -L low threshold, -H high threshold
         -- --low lowthres_color, --high highthres_color
-        [ "-t", tmp, "-L", "32", "-H", "80", "-T", "20"
-        , "--low", lowThresColor] -- default high color is good.
-        ["-w", ""]
+        [ "-t", tmp, "-L", "32", "-H", "80", "-T", "20"]
+        ["-w", "", "--low", lowThresColor] -- default high color is good.
     )
     18000
  where
